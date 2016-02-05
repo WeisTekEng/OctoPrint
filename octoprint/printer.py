@@ -208,7 +208,10 @@ class Printer():
 		self._comm.cancelPrint()
 
 		if disableMotorsAndHeater:
-			self.commands(["M84", "M104 S0", "M140 S0", "M106 S0"]) # disable motors, switch off heaters and fan
+			if settings().get(["feature","grbl"]):
+				self.command(["chr(24)"]) # GRBL soft reset crtl-x
+			else:
+				self.commands(["M84", "M104 S0", "M140 S0", "M106 S0"]) # disable motors, switch off heaters and fan
 
 		# reset progress, height, print time
 		self._setCurrentZ(None)
