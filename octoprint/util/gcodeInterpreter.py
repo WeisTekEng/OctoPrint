@@ -79,7 +79,7 @@ class gcode(object):
 		pathType = 'CUSTOM';
 		currentLayer = []
 		unknownGcodes={}
-		unknownMcodes={}
+		unknownMcodes={"M110"}
 		currentPath = gcodePath('move', pathType, layerThickness, pos.copy())
 		currentPath.list[0].e = totalExtrusion
 		currentPath.list[0].extrudeAmountMultiply = extrudeAmountMultiply

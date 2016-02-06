@@ -172,11 +172,12 @@ class VirtualPrinter():
 			if self._sdCardReady:
 				filename = data.split(None, 1)[1].strip()
 				self._deleteSdFile(filename)
-		elif "M110" in data:
-			# reset current line
-			self.currentLine = int(re.search('^N([0-9]+)', data).group(1))
-			self.readList.append("reset line to %r\n" % self.currentLine)
-			self.readList.append("ok\n")
+		#this command has ISSUES with grbl
+#		elif "M110" in data:
+		#	# reset current line
+#			self.currentLine = int(re.search('^N([0-9]+)', data).group(1))
+#			self.readList.append("reset line to %r\n" % self.currentLine)
+#			self.readList.append("ok\n")
 		elif "M114" in data:
 			# send dummy position report
 			self.readList.append("ok C: X:10.00 Y:3.20 Z:5.20 E:1.24")
@@ -1008,6 +1009,8 @@ class MachineCom(object):
 					except:
 						pass
 
+				#supplress M110 commands from Grbl, does not play nice.
+#				if not settings().getBoolean(["features","grbl"]):
 				if matchesGcode(cmd, "M110"):
 					newLineNumber = None
 					if " N" in cmd:
@@ -1018,11 +1021,11 @@ class MachineCom(object):
 					else:
 						newLineNumber = 0
 
-					# send M110 command with new line number
+						# send M110 command with new line number
 					self._doSendWithChecksum(cmd, newLineNumber)
 					self._currentLine = newLineNumber + 1
 
-					# after a reset of the line number we have no way to determine what line exactly the printer now wants
+						# after a reset of the line number we have no way to determine what line exactly the printer now wants
 					self._lastLines = []
 					self._resendDelta = None
 					return
