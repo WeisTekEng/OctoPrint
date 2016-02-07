@@ -208,10 +208,14 @@ class Printer():
 		self._comm.cancelPrint()
 
 		if disableMotorsAndHeater:
+			#check if we are grbl enabled.
 			if settings().get(["feature","grbl"]):
+				#This command stop the printer and activates grbl's alarm
+				#you need to send $X to unlock.
 				self.commands([chr(24)])
 			else:
-				self.commands(["nope"]) # disable motors, switch off heaters and fan
+				#Disable motors, switch off headers and fan				
+				self.commands(["nope"])
 
 		# reset progress, height, print time
 		self._setCurrentZ(None)
@@ -569,9 +573,7 @@ class GcodeLoader(threading.Thread):
 		#Send an initial M110 to reset the line counter to zero.
 		prevLineType = lineType = "CUSTOM"
 		#This line seems to kill a print with grbl M110 N0 not supported.
-		#if settings().getBoolean(["feature","grbl"]):
-		#	gcodeList = [""]
-		#else:
+		#this command has been disabled in gcodeInterpreter.py
 		gcodeList = ["M110 N0"]
 		filesize = os.stat(self._filename).st_size
 		with open(self._filename, "r") as file:

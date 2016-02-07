@@ -173,11 +173,12 @@ class VirtualPrinter():
 				filename = data.split(None, 1)[1].strip()
 				self._deleteSdFile(filename)
 		#this command has ISSUES with grbl
-#		elif "M110" in data:
+		#this command has been disabled in gcodeInterpreter.py
+		elif "M110" in data:
 		#	# reset current line
-#			self.currentLine = int(re.search('^N([0-9]+)', data).group(1))
-#			self.readList.append("reset line to %r\n" % self.currentLine)
-#			self.readList.append("ok\n")
+			self.currentLine = int(re.search('^N([0-9]+)', data).group(1))
+			self.readList.append("reset line to %r\n" % self.currentLine)
+			self.readList.append("ok\n")
 		elif "M114" in data:
 			# send dummy position report
 			self.readList.append("ok C: X:10.00 Y:3.20 Z:5.20 E:1.24")
@@ -1010,7 +1011,7 @@ class MachineCom(object):
 						pass
 
 				#supplress M110 commands from Grbl, does not play nice.
-#				if not settings().getBoolean(["features","grbl"]):
+				#^ this has been disabled in gcodeInterpreter.py
 				if matchesGcode(cmd, "M110"):
 					newLineNumber = None
 					if " N" in cmd:

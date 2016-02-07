@@ -79,7 +79,15 @@ class gcode(object):
 		pathType = 'CUSTOM';
 		currentLayer = []
 		unknownGcodes={}
-		unknownMcodes={"M110"}
+		
+		#M110 causes grbl to crash, axis start wandering with no 
+		#respones to grbl or commands. this is disabled if grbl is true
+		#in settings.py
+		if settings().getBoolean(["features","grbl"]):
+			unknownMcodes={"M110"}
+		else:
+			unknownMcodes={}
+ 
 		currentPath = gcodePath('move', pathType, layerThickness, pos.copy())
 		currentPath.list[0].e = totalExtrusion
 		currentPath.list[0].extrudeAmountMultiply = extrudeAmountMultiply
