@@ -9,6 +9,8 @@ import zlib
 import logging
 
 from octoprint.util import util3d
+#added for sanity checks.
+from octoprint.settings import settings
 
 preferences = {
 	"extruder_offset_x1": -22.0,
