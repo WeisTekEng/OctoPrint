@@ -215,7 +215,7 @@ class Printer():
 				self.commands([chr(24)])
 			else:
 				#Disable motors, switch off headers and fan				
-				self.commands(["nope"])
+				self.commands(["M84", "M104 S0", "M140 S0", "M106 S0"])
 
 		# reset progress, height, print time
 		self._setCurrentZ(None)
